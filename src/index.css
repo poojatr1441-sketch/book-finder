@@ -1,0 +1,251 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import a professional font (use locally or from Google) */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+
+:root {
+  --bg: #f7fafc;
+  --surface: #ffffff;
+  --primary: #0f66d8;
+  --primary-700: #0b56b1;
+  --muted: #6b7280;
+  --text: #0f172a;
+  --card-shadow: 0 8px 22px rgba(15, 22, 42, 0.06);
+}
+
+.dark {
+  --bg: #071428;
+  --surface: #0b1220;
+  --primary: #06b6d4;
+  --primary-700: #0891b2;
+  --muted: #94a3b8;
+  --text: #e6eef8;
+  --card-shadow: 0 8px 22px rgba(2, 6, 23, 0.5);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+}
+body {
+  @apply antialiased;
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* font utility for logo / headings */
+.font-display {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+}
+
+/* small animation helpers */
+.anim-fade {
+  transition: opacity 180ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+.anim-scale {
+  transition: transform 160ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 160ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade,
+  .anim-scale {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* shimmer skeleton */
+@keyframes shimmer {
+  100% {
+    background-position: -200% 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f3f4f6 0, #e9eef5 50%, #f3f4f6 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.1s linear infinite;
+}
+.dark .skeleton {
+  background: linear-gradient(90deg, #0b1220 0, #071428 50%, #0b1220 100%);
+}
+
+/* clamp fallback */
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* focus ring fallback for accessibility */
+button:focus,
+input:focus,
+select:focus {
+  outline: 2px solid rgba(15, 102, 216, 0.12);
+  outline-offset: 3px;
+}
+
+/* small card shadow helper */
+.shadow-var {
+  box-shadow: var(--card-shadow);
+}
+/* Hero animation & student icon/underline styles */
+
+/* wrapper ensures stacked blocks overlap */
+.hero-wrapper {
+  position: relative;
+  min-height: 3.5rem;
+}
+
+/* Each hero-block sits on top of each other; visibility controlled by classes */
+.hero-block {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0;
+  transition: opacity 360ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    transform 360ms cubic-bezier(0.2, 0.9, 0.2, 1);
+  will-change: opacity, transform;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* visible block is interactive */
+.hero-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  position: relative;
+}
+
+/* hidden quickly fades out and slides slightly */
+.hero-block.hidden {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* hero text styling */
+.hero-title {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.1;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* student-specific title tweaks */
+.hero-title.student-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* small subtext */
+.hero-sub {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* extra small for student label */
+.hero-sub.small {
+  font-size: 0.725rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* student icon next to title */
+.student-icon {
+  color: var(--primary);
+  opacity: 0;
+  transform: translateX(-6px) scale(0.98);
+  transition: opacity 320ms ease, transform 320ms cubic-bezier(0.2, 0.9, 0.2, 1);
+  display: inline-block;
+}
+
+/* underline accent for student mode */
+.student-underline {
+  height: 3px;
+  width: 140px;
+  background: linear-gradient(90deg, var(--primary), rgba(15, 102, 216, 0.6));
+  border-radius: 4px;
+  margin-top: 8px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 360ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    transform 360ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+/* when student block is visible, reveal extras */
+.hero-block.visible.student .student-icon {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.hero-block.visible.student .student-underline {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-block,
+  .student-icon,
+  .student-underline {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+/* Compact, consistent select styling */
+.select-compact {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  /* ensure the control doesn't grow because of parent flex */
+  min-width: 0;
+}
+
+/* Slightly tighter inner text and vertical rhythm */
+.select-compact,
+.select-compact option {
+  line-height: 1.1;
+}
+
+/* Improve focus ring visibility and compact shadow on focus */
+.select-compact:focus {
+  box-shadow: 0 6px 18px rgba(15, 102, 216, 0.08);
+}
+
+/* Make native select chevron less intrusive on some UAs */
+select::-ms-expand {
+  display: none;
+}
+
+/* Keep chevron aligned when rounding changes */
+.select-compact + svg {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* iOS: smooth horizontal scrolling for overflow-x-auto lists */
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Reduce default font-size slightly on very small screens for dense UIs */
+@media (max-width: 420px) {
+  .select-compact {
+    font-size: 0.95rem;
+  }
+}
